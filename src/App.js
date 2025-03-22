@@ -27,7 +27,7 @@ function App() {
     }
 
     try {
-      const res = await fetch(`https://narrify.cloud:5050/summarize?video_id=${videoId}`, {
+      const res = await fetch(`http://narrify.cloud:5050/summarize?video_id=${videoId}`, {
         headers: {
           Authorization: 'Bearer 8475d6eed902485fdc4186bc8363a64eaf3dc96f2737e957aea225edc938f745'
         }
