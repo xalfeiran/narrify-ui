@@ -29,6 +29,7 @@ function App() {
     try {
       const res = await fetch(`https://aba7-187-150-199-134.ngrok-free.app/summarize?video_id=${videoId}`, {
         headers: {
+          'ngrok-skip-browser-warning': 'true',
           Authorization: 'Bearer 8475d6eed902485fdc4186bc8363a64eaf3dc96f2737e957aea225edc938f745'
         }
       });
