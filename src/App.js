@@ -52,14 +52,22 @@ function App() {
     <>
     <Helmet>
       <title>Narrify – Instantly Summarize YouTube Videos with AI</title>
-      <meta name="description" content="Narrify instantly generates smart, structured summaries of YouTube videos using AI. Paste a link and save time." />
-      <meta name="keywords" content="YouTube summary, AI video summarizer, transcript to text, video highlights, narrify app" />
+      <meta name="description" content="Narrify summarizes YouTube videos instantly using AI. Just paste a link and get the key ideas, steps, or takeaways in seconds." />
+      <meta name="keywords" content="YouTube summary, AI video summarizer, summarize YouTube video, YouTube transcript, explain video content, summarize video with AI, educational tool, video highlights, productivity tools" />
       <meta name="author" content="Mindware" />
-      <meta property="og:title" content="Narrify – Instantly Summarize YouTube Videos" />
-      <meta property="og:description" content="Paste a YouTube link and let Narrify give you a smart summary of what the video is about. Powered by AI." />
-      <meta property="og:image" content="/images/narrify-logo.png" />
-      <meta property="og:url" content="https://narrify.yourdomain.com" />
+
+      {/* Open Graph for Facebook, LinkedIn, etc. */}
+      <meta property="og:title" content="Narrify – Instantly Summarize YouTube Videos with AI" />
+      <meta property="og:description" content="Paste a YouTube link and Narrify instantly summarizes it using AI. Save time, get key insights fast." />
+      <meta property="og:image" content="https://narrify.cloud/images/narrify-logo.png" />
+      <meta property="og:url" content="https://narrify.cloud" />
+      <meta property="og:type" content="website" />
+
+      {/* Twitter card */}
       <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Narrify – Instantly Summarize YouTube Videos with AI" />
+      <meta name="twitter:description" content="AI-based YouTube summarizer. Paste a video link and Narrify gives you an instant, clean summary." />
+      <meta name="twitter:image" content="https://narrify.cloud/images/narrify-logo.png" />
     </Helmet>
     <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-gray-100 to-gray-200 px-4">
       <div className="w-full max-w-4xl bg-white shadow-xl rounded-2xl p-10 text-center">
@@ -98,8 +106,12 @@ function App() {
           {/* Title + Thumbnail side-by-side */}
           <div className="flex flex-col md:flex-row justify-between gap-4 items-start">
             <div className="flex-1">
-              <h2 className="text-2xl font-bold">{summary.title}</h2>
-              <p className="text-sm text-gray-500 mt-1">Channel: {summary.channel}</p>
+              <h2 className="text-2xl font-bold">{
+                decodeURIComponent(escape(summary.title))}
+              </h2>
+              <p className="text-sm text-gray-500 mt-1">
+                Channel: {decodeURIComponent(escape(summary.channel))}
+              </p>
             </div>
         
             {/* YouTube thumbnail or video embed */}
