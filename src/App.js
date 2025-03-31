@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import './index.css';
 
@@ -11,15 +10,14 @@ function App() {
   usePageTracking();
 
   function usePageTracking() {
-    const location = useLocation();
   
     useEffect(() => {
       if (window.gtag) {
         window.gtag('config', 'G-XXXXXXXXXX', {
-          page_path: location.pathname + location.search,
+          page_path: window.location.pathname + window.location.search,
         });
       }
-    }, [location]);
+    }, []);
   }
 
   const extractVideoId = (url) => {
