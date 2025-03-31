@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import './index.css';
 
@@ -7,6 +8,19 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [summary, setSummary] = useState(null);
   const [error, setError] = useState('');
+  usePageTracking();
+
+  function usePageTracking() {
+    const location = useLocation();
+  
+    useEffect(() => {
+      if (window.gtag) {
+        window.gtag('config', 'G-XXXXXXXXXX', {
+          page_path: location.pathname + location.search,
+        });
+      }
+    }, [location]);
+  }
 
   const extractVideoId = (url) => {
     const match = url.match(/(?:v=|youtu\.be\/|\/embed\/)([a-zA-Z0-9_-]{11})/);
