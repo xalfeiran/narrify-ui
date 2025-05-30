@@ -114,12 +114,8 @@ function App() {
           {/* Title + Thumbnail side-by-side */}
           <div className="flex flex-col md:flex-row justify-between gap-4 items-start">
             <div className="flex-1">
-              <h2 className="text-2xl font-bold">{
-                decodeURIComponent(escape(summary.title))}
-              </h2>
-              <p className="text-sm text-gray-500 mt-1">
-                Channel: {decodeURIComponent(escape(summary.channel))}
-              </p>
+              <h2 className="text-2xl font-bold">{summary.title}</h2>
+              <p className="text-sm text-gray-500 mt-1">Channel: {summary.channel}</p>
             </div>
         
             {/* YouTube thumbnail or video embed */}
