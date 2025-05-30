@@ -39,11 +39,7 @@ function App() {
     }
 
     try {
-      const res = await fetch(`https://c218-187-150-199-134.ngrok-free.app/summarize?video_id=${videoId}`, {
-        headers: {
-          'ngrok-skip-browser-warning': 'true'
-        }
-      });
+      const res = await fetch(`https://4ed4-187-150-173-163.ngrok-free.app/summarize?video_id=${videoId}`);
       const data = await res.json(); // ✅ Only call this once
     
       if (res.status === 429) {
