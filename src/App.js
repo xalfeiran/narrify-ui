@@ -7,18 +7,12 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [summary, setSummary] = useState(null);
   const [error, setError] = useState('');
-  usePageTracking();
 
-  function usePageTracking() {
-  
-    useEffect(() => {
-      if (window.gtag) {
-        window.gtag('config', 'G-XXXXXXXXXX', {
-          page_path: window.location.pathname + window.location.search,
-        });
-      }
-    }, []);
-  }
+  useEffect(() => {
+    window.gtag?.('config', 'G-SH947189RP', {
+      page_path: window.location.pathname + window.location.search,
+    });
+  }, []);
 
   const extractVideoId = (url) => {
     const match = url.match(/(?:v=|youtu\.be\/|\/embed\/)([a-zA-Z0-9_-]{11})/);
@@ -43,34 +37,26 @@ function App() {
         `https://4ed4-187-150-173-163.ngrok-free.app/summarize?video_id=${videoId}`,
         {
           headers: {
-            // 👇 tells ngrok “skip the browser-warning page”
             'ngrok-skip-browser-warning': 'true',
-    
-            // if your API is protected leave this in; otherwise drop it
-            'Authorization': `Bearer ${import.meta.env.VITE_NARRIFY_TOKEN}`,
+            ...(import.meta.env.VITE_NARRIFY_TOKEN && {
+              Authorization: `Bearer ${import.meta.env.VITE_NARRIFY_TOKEN}`,
+            }),
           },
-        },
+        }
       );
     
-      if (!res.ok) {
-        // show the text because the body might NOT be JSON
-        throw new Error(await res.text());
-      }
+      const bodyIsJson = res.headers
+        .get('content-type')
+        ?.includes('application/json');
+      const data = bodyIsJson ? await res.json() : { error: await res.text() };
     
-      const data = await res.json();   // ✅ call once
-    
-      if (res.status === 429) {
-        setError(`${data.error} (${data.retry_after_seconds} sec)`);
-      } else if (res.ok) {
-        setSummary(data);
-      } else {
-        setError(data.error || 'An error occurred.');
-      }
+      if (!res.ok) throw new Error(data.error || res.statusText);
+      setSummary(data);
     } catch (err) {
-      setError('Failed to fetch summary.');
+      setError(err.message || 'Failed to fetch summary.');
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
