@@ -27,12 +27,18 @@ function App() {
     setSummary(null);
     setError('');
     setLoading(true);
-
+    
     const videoId = extractVideoId(youtubeUrl);
     if (!videoId) {
       setError('Invalid YouTube URL.');
       setLoading(false);
       return;
+    }
+
+    if (window.gtag) {
+      window.gtag('event', 'summarize_click', {
+        video_id: videoId,
+      });
     }
 
     try {
