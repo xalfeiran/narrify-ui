@@ -37,10 +37,7 @@ function App() {
         `https://4ed4-187-150-173-163.ngrok-free.app/summarize?video_id=${videoId}`,
         {
           headers: {
-            'ngrok-skip-browser-warning': 'true',
-            ...(import.meta.env.VITE_NARRIFY_TOKEN && {
-              Authorization: `Bearer ${import.meta.env.VITE_NARRIFY_TOKEN}`,
-            }),
+            'ngrok-skip-browser-warning': 'true',            
           },
         }
       );
