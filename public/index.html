@@ -8,6 +8,16 @@
     <meta property="og:image" content="https://narrify.cloud/images/narrify.png" />
     <meta property="og:url" content="https://narrify.cloud" />
     <meta name="twitter:card" content="summary_large_image" />
+    <script async
+          src="https://www.googletagmanager.com/gtag/js?id=G-SH947189RP"></script>
+
+    <!-- ② bootstrap gtag() and first page_view -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-SH947189RP');      // <- your measurement-ID
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
