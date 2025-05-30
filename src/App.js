@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
+import useAnalytics from './useAnalytics';
+import PageView from './PageView';
 import './index.css';
 
 function App() {
@@ -7,6 +9,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [summary, setSummary] = useState(null);
   const [error, setError] = useState('');
+  useAnalytics();
 
   useEffect(() => {
     window.gtag?.('config', 'G-SH947189RP', {
@@ -58,6 +61,7 @@ function App() {
 
   return (
     <>
+    <PageView />
     <Helmet>
       <title>Narrify – Instantly Summarize YouTube Videos with AI</title>
       <meta name="description" content="Narrify summarizes YouTube videos instantly using AI. Just paste a link and get the key ideas, steps, or takeaways in seconds." />
