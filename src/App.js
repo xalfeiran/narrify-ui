@@ -39,8 +39,25 @@ function App() {
     }
 
     try {
-      const res = await fetch(`https://4ed4-187-150-173-163.ngrok-free.app/summarize?video_id=${videoId}`);
-      const data = await res.json(); // ✅ Only call this once
+      const res = await fetch(
+        `https://4ed4-187-150-173-163.ngrok-free.app/summarize?video_id=${videoId}`,
+        {
+          headers: {
+            // 👇 tells ngrok “skip the browser-warning page”
+            'ngrok-skip-browser-warning': 'true',
+    
+            // if your API is protected leave this in; otherwise drop it
+            'Authorization': `Bearer ${import.meta.env.VITE_NARRIFY_TOKEN}`,
+          },
+        },
+      );
+    
+      if (!res.ok) {
+        // show the text because the body might NOT be JSON
+        throw new Error(await res.text());
+      }
+    
+      const data = await res.json();   // ✅ call once
     
       if (res.status === 429) {
         setError(`${data.error} (${data.retry_after_seconds} sec)`);
