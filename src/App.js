@@ -43,7 +43,7 @@ function App() {
 
     try {
       const res = await fetch(
-        `https://4ed4-187-150-173-163.ngrok-free.app/summarize?video_id=${videoId}`,
+        `https://0329048676dd.ngrok-free.app/summarize?video_id=${videoId}`,
         {
           headers: {
             'ngrok-skip-browser-warning': 'true',            
