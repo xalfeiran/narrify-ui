@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
+import useAnalytics from './useAnalytics';
+import PageView from './PageView';
 import './index.css';
 
 function App() {
@@ -7,18 +9,13 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [summary, setSummary] = useState(null);
   const [error, setError] = useState('');
-  usePageTracking();
+  useAnalytics();
 
-  function usePageTracking() {
-  
-    useEffect(() => {
-      if (window.gtag) {
-        window.gtag('config', 'G-XXXXXXXXXX', {
-          page_path: window.location.pathname + window.location.search,
-        });
-      }
-    }, []);
-  }
+  useEffect(() => {
+    window.gtag?.('config', 'G-SH947189RP', {
+      page_path: window.location.pathname + window.location.search,
+    });
+  }, []);
 
   const extractVideoId = (url) => {
     const match = url.match(/(?:v=|youtu\.be\/|\/embed\/)([a-zA-Z0-9_-]{11})/);
@@ -30,7 +27,7 @@ function App() {
     setSummary(null);
     setError('');
     setLoading(true);
-
+    
     const videoId = extractVideoId(youtubeUrl);
     if (!videoId) {
       setError('Invalid YouTube URL.');
@@ -38,30 +35,39 @@ function App() {
       return;
     }
 
-    try {
-      const res = await fetch(`https://3e6d-187-150-199-134.ngrok-free.app/summarize?video_id=${videoId}`, {
-        headers: {
-          'ngrok-skip-browser-warning': 'true'
-        }
+    if (window.gtag) {
+      window.gtag('event', 'summarize_click', {
+        video_id: videoId,
       });
-      const data = await res.json(); // ✅ Only call this once
-    
-      if (res.status === 429) {
-        setError(`${data.error} (${data.retry_after_seconds} sec)`);
-      } else if (res.ok) {
-        setSummary(data);
-      } else {
-        setError(data.error || 'An error occurred.');
-      }
-    } catch (err) {
-      setError('Failed to fetch summary.');
     }
 
-    setLoading(false);
+    try {
+      const res = await fetch(
+        `https://02fa4275b68b.ngrok-free.app/summarize?video_id=${videoId}`,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': 'true',            
+          },
+        }
+      );
+    
+      const bodyIsJson = res.headers
+        .get('content-type')
+        ?.includes('application/json');
+      const data = bodyIsJson ? await res.json() : { error: await res.text() };
+    
+      if (!res.ok) throw new Error(data.error || res.statusText);
+      setSummary(data);
+    } catch (err) {
+      setError(err.message || 'Failed to fetch summary.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <>
+    <PageView />
     <Helmet>
       <title>Narrify – Instantly Summarize YouTube Videos with AI</title>
       <meta name="description" content="Narrify summarizes YouTube videos instantly using AI. Just paste a link and get the key ideas, steps, or takeaways in seconds." />
@@ -118,12 +124,8 @@ function App() {
           {/* Title + Thumbnail side-by-side */}
           <div className="flex flex-col md:flex-row justify-between gap-4 items-start">
             <div className="flex-1">
-              <h2 className="text-2xl font-bold">{
-                decodeURIComponent(escape(summary.title))}
-              </h2>
-              <p className="text-sm text-gray-500 mt-1">
-                Channel: {decodeURIComponent(escape(summary.channel))}
-              </p>
+              <h2 className="text-2xl font-bold">{summary.title}</h2>
+              <p className="text-sm text-gray-500 mt-1">Channel: {summary.channel}</p>
             </div>
         
             {/* YouTube thumbnail or video embed */}
